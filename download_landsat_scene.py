@@ -73,7 +73,9 @@ def connect_earthexplorer_no_proxy(usgs):
         sys.exit(-3)
         
     params = urllib.urlencode(dict(username=usgs['account'],password= usgs['passwd'], csrf_token=token))
-    request = urllib2.Request("https://ers.cr.usgs.gov/login", params, headers={})
+    #request = urllib2.Request("https://ers.cr.usgs.gov/login", params, headers={})   # this line is cauing error (Service Not Available) - Muhammad
+    request = urllib2.Request("https://ers.cr.usgs.gov/login", params)
+    request.add_header('Referer', 'http://landscapeportal.org/')
     f = urllib2.urlopen(request)
 
     data = f.read()
@@ -423,7 +425,9 @@ def main():
             stations=['EDC','SGS','AGS','ASN','SG1','CUB','COA']
         if produit.startswith('LT5'):
             repert='3119'
-            stations=['GLC','ASA','KIR','MOR','KHC', 'PAC', 'KIS', 'CHM', 'LGS', 'MGR', 'COA', 'MPS', 'CUB']		
+            #stations=['GLC','ASA','KIR','MOR','KHC', 'PAC', 'KIS', 'CHM', 'LGS', 'MGR', 'COA', 'MPS'] # LT5 has many stations not all of them are here. - Muhammad
+            # If user has the knowledge of stations, he should use selected ones - Muhammad
+            stations=['GLC','KIR','COA','LGS','ASA','HOA','CUB','GNC','PAC','BJC','KHC','CPE','LBG','NSG','SGI','DKI','RPI','FUI','MTI','HAJ','MLK','BIK','CHM','ULM','ISP','IKR','MGR','MOR','RSA','JSA','MPS','KIS','CLT','BKT']      		
         
         if options.station !=None:
             stations=[options.station]
@@ -573,7 +577,9 @@ def main():
                 stations=['EDC','SGS','AGS','ASN','SG1']
             if produit.startswith('LT5'):
                 repert='3119'
-                stations=['GLC','ASA','KIR','MOR','KHC', 'PAC', 'KIS', 'CHM', 'LGS', 'MGR', 'COA', 'MPS']	
+                #stations=['GLC','ASA','KIR','MOR','KHC', 'PAC', 'KIS', 'CHM', 'LGS', 'MGR', 'COA', 'MPS'] # LT5 has many stations not all of them are here. - Muhammad
+                # If user has the knowledge of stations, he should use selected ones - Muhammad
+                stations=['GLC','KIR','COA','LGS','ASA','HOA','CUB','GNC','PAC','BJC','KHC','CPE','LBG','NSG','SGI','DKI','RPI','FUI','MTI','HAJ','MLK','BIK','CHM','ULM','ISP','IKR','MGR','MOR','RSA','JSA','MPS','KIS','CLT','BKT']      
             if not os.path.exists(rep+'/'+site):
                 os.mkdir(rep+'/'+site)
             url="https://earthexplorer.usgs.gov/download/%s/%s/STANDARD/EE"%(repert,produit)
